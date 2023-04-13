@@ -99,9 +99,9 @@
 		C6D62E3F29E8B34500B33E9D /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				C6D62E4029E8B34500B33E9D /* UI */,
 				C6D62E5429E8B34500B33E9D /* Application */,
 				C6D62E5729E8B34500B33E9D /* Data */,
+				C6D62E4029E8B34500B33E9D /* UI */,
 			);
 			path = Core;
 			sourceTree = "<group>";
