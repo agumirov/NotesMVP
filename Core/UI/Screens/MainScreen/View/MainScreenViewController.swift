@@ -21,9 +21,10 @@ extension MainScreenViewController {
 }
 
 class MainScreenViewController: UIViewController, MainScreenProtocol {
+    //MARK: Properties
     var presenter:  MainScreenPresenterProtocol!
-    var cellWidth   = 150
-    var screenshots    = [UIImage]()
+    private var cellWidth   = 0
+    private var screenshots    = [UIImage]()
     
     var mainCollectionView: UICollectionView = {
         let layout                 = UICollectionViewFlowLayout()
@@ -33,13 +34,10 @@ class MainScreenViewController: UIViewController, MainScreenProtocol {
         collection.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.cellId)
         return collection
     }()
-    
+    //MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.systemBackground
-        cellWidth = Int(view.frame.size.width * 0.45)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose,
-                                                            target: self, action: #selector(addNewNote))
+        viewConfig()
         mainCollectionSetup()
     }
     
@@ -47,6 +45,13 @@ class MainScreenViewController: UIViewController, MainScreenProtocol {
         super.viewWillAppear(animated)
         presenter.viewDidLoad()
         mainCollectionView.reloadData()
+    }
+    
+    private func viewConfig() {
+        view.backgroundColor = UIColor.systemBackground
+        cellWidth = Int(view.frame.size.width * 0.45)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose,
+                                                            target: self, action: #selector(addNewNote))
     }
     
     @objc func addNewNote() {

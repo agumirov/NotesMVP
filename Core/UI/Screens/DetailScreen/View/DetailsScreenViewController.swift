@@ -150,7 +150,7 @@ extension DetailsScreenViewController {
     }
 }
 
-//MARK: Protocol realization
+//MARK: Protocol implementation
 
 extension DetailsScreenViewController {
     func success(attString: NSAttributedString) {
