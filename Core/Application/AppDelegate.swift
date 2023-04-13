@@ -1,19 +1,28 @@
 //
 //  AppDelegate.swift
-//  NotesApp
+//  TestTask
 //
-//  Created by G G on 14.04.2023.
+//  Created by G G on 28.12.2022.
 //
 
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
+    var styleKeyboardService: StyleKeyboardService!
+    var notesService: NotesServiceProtocol!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // create instances of dependencies
+        styleKeyboardService = StyleKeyboardService()
+        notesService = NotesService()
+        
+        // register dependencies
+        DIContainer.standart.register(styleKeyboardService!)
+        DIContainer.standart.register(notesService!)
+        
         return true
     }
 
