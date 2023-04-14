@@ -20,9 +20,8 @@ protocol DetailsScreenProtocol: AnyObject {
 //MARK: Properites
 
 class DetailsScreenViewController: UIViewController,
-                     DetailsScreenProtocol,
-                     UITextViewDelegate,
-                     ViewControllerProtocol {
+                                   UITextViewDelegate,
+                                   ViewControllerProtocol {
     
     
     var presenter: DetailsScreenPresenterProtocol!
@@ -31,6 +30,18 @@ class DetailsScreenViewController: UIViewController,
     var textView = UITextView()
     var isStyleEditing = false
     var styleKeyboardService: StyleKeyboardService!
+    
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        return contentView
+    }()
     
     let accessoryView: UIView = {
         let view = UIView()
@@ -46,36 +57,58 @@ class DetailsScreenViewController: UIViewController,
         let image = UIImage(systemName: "textformat.size",
                             withConfiguration: ViewSize.imageConfig)
         button.setImage(image, for: .normal)
-        
         return button
     }()
     
+    // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
         presenter.viewDidLoad(noteIndex: noteIndex)
         setupViews()
-    }
-}
-
-//MARK: Views setup
-
-extension DetailsScreenViewController {
-    
-    func setupViews() {
         navigationBarSetup()
-        textViewSetup()
-        accessoryViewSetup()
     }
-    
-    func textViewSetup() {
-        view.addSubview(textView)
+    // MARK: SetupViews
+    func setupViews() {
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(textView)
+        accessoryView.addSubview(changeKeyboardButton)
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor),
+        ])
+        
         textView.snp.makeConstraints { make in
             make.left.right.top.bottom.equalToSuperview()
         }
         textView.inputAccessoryView = accessoryView
+        
+        
+        changeKeyboardButton.addTarget(self,
+                                       action: #selector(switchKeyboard),
+                                       for: .touchUpInside)
+        changeKeyboardButton.snp.makeConstraints { make in
+            make.left.right.top.bottom.equalToSuperview()
+        }
+        
     }
-    
     
     func navigationBarSetup() {
         
@@ -92,34 +125,36 @@ extension DetailsScreenViewController {
 extension DetailsScreenViewController {
     @objc func doneAction() {
         presenter.saveNote(attributedString: self.textView.attributedText,
-                                              screenshot: textView.screenShot(),
-                                              noteIndex: noteIndex)
+                           screenshot: textView.screenShot(),
+                           noteIndex: noteIndex)
     }
-
+    
     @objc func deleteNote() {
         presenter.deleteNote(noteIndex: noteIndex!)
     }
-}
-
-//MARK: Stylekeyboard methods and realization
-
-extension DetailsScreenViewController {
     
-    func accessoryViewSetup() {
-        accessoryView.addSubview(changeKeyboardButton)
+    @objc func adjustForKeyboard(notification: Notification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         
-        changeKeyboardButton.snp.makeConstraints { make in
-            make.left.right.top.bottom.equalToSuperview()
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+        
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            textView.contentInset = .zero
+        } else {
+            textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
         }
         
-        changeKeyboardButton.addTarget(self,
-                                       action: #selector(switchKeyboard),
-                                       for: .touchUpInside)
+        textView.scrollIndicatorInsets = textView.contentInset
+        
+        let selectedRange = textView.selectedRange
+        textView.scrollRangeToVisible(selectedRange)
     }
-    
-    
-    //add frame to make style keyboard's size equal to standart keyboard size
-    //inserts style keyboard in textView
+}
+
+//MARK: Stylekeyboard methods and implementation
+
+extension DetailsScreenViewController {
     
     @objc func showStyleKeyboard() {
         let bottomSafeAreaInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0.0
@@ -152,7 +187,7 @@ extension DetailsScreenViewController {
 
 //MARK: Protocol implementation
 
-extension DetailsScreenViewController {
+extension DetailsScreenViewController: DetailsScreenProtocol {
     func success(attString: NSAttributedString) {
         self.textView.attributedText = attString
     }
@@ -160,7 +195,7 @@ extension DetailsScreenViewController {
     func failure() {
         print("Error")
     }
-
+    
     
     func changeFont(attribute: Int) {
         textView.textFontChange(to: Fonts(rawValue: attribute) ?? .bold)
@@ -169,7 +204,7 @@ extension DetailsScreenViewController {
     func changeSize(action: Int) {
         textView.changeFontSize(how: FontSize(rawValue: action) ?? .increase)
     }
-
+    
 }
 
 
