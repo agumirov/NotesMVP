@@ -18,7 +18,7 @@ extension UITextView {
             return
         }
         
-        let initialFont = textStorage.attribute(.font, at: selectedRange.location, effectiveRange: nil) as? UIFont ?? UIFont(descriptor: .init(), size: 15)
+        let initialFont = textStorage.attribute(.font, at: selectedRange.location, effectiveRange: nil) as? UIFont ?? UIFont(descriptor: .init(), size: Constants.defaultFontSize)
         let descriptor = initialFont.fontDescriptor
         let updatedFont = how == .increase ?
         UIFont(descriptor: descriptor, size: initialFont.pointSize + 2) :
@@ -63,7 +63,7 @@ extension UITextView {
         let underlined = textStorage.attribute(.underlineStyle, at: range.location, effectiveRange: nil) as? Int
         let strikethrough = textStorage.attribute(.strikethroughStyle, at: range.location, effectiveRange: nil) as? Int
         
-        let initialFont = textStorage.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont ?? UIFont(descriptor: .init(), size: 15)
+        let initialFont = textStorage.attribute(.font, at: range.location, effectiveRange: nil) as? UIFont ?? UIFont(descriptor: .init(), size: Constants.defaultFontSize)
         
         var currentTraits = initialFont.fontDescriptor.symbolicTraits
         let fontSize = initialFont.pointSize

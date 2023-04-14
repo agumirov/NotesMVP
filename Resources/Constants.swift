@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-enum ViewSize {
+enum Constants {
     static var accessoryViewHeight = 50.0
     static var buttonCornerRadius = 20.0
     static var keyboardSizeHeight = 300.0
@@ -16,4 +16,5 @@ enum ViewSize {
                                                          weight: .bold)
     static var buttonRowHeight = 80.0
     static var columnHeigh = 200.0
+    static var defaultFontSize = 20.0
 }

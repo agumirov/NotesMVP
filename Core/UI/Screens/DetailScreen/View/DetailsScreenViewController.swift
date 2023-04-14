@@ -27,27 +27,21 @@ class DetailsScreenViewController: UIViewController,
     var presenter: DetailsScreenPresenterProtocol!
     var attString: NSAttributedString!
     var noteIndex: Int?
-    var textView = UITextView()
+    
     var isStyleEditing = false
     var styleKeyboardService: StyleKeyboardService!
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
-    
-    private let contentView: UIView = {
-        let contentView = UIView()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        return contentView
+    let textView: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont(name: "Verdana", size: 18)
+        return textView
     }()
     
     let accessoryView: UIView = {
         let view = UIView()
         view.frame = .init(origin: .zero,
                            size: CGSize(width: 10,
-                                        height: ViewSize.accessoryViewHeight))
+                                        height: Constants.accessoryViewHeight))
         view.backgroundColor = .systemGray5
         return view
     }()
@@ -55,7 +49,7 @@ class DetailsScreenViewController: UIViewController,
     let changeKeyboardButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
         let image = UIImage(systemName: "textformat.size",
-                            withConfiguration: ViewSize.imageConfig)
+                            withConfiguration: Constants.imageConfig)
         button.setImage(image, for: .normal)
         return button
     }()
@@ -75,25 +69,8 @@ class DetailsScreenViewController: UIViewController,
     }
     // MARK: SetupViews
     func setupViews() {
-        
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubview(textView)
+        view.addSubview(textView)
         accessoryView.addSubview(changeKeyboardButton)
-        
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor),
-        ])
         
         textView.snp.makeConstraints { make in
             make.left.right.top.bottom.equalToSuperview()
@@ -107,15 +84,12 @@ class DetailsScreenViewController: UIViewController,
         changeKeyboardButton.snp.makeConstraints { make in
             make.left.right.top.bottom.equalToSuperview()
         }
-        
     }
     
     func navigationBarSetup() {
-        
         let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneAction))
         let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addImageToNote))
         let delete = noteIndex == nil ? UIBarButtonItem() : UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteNote))
-        
         navigationItem.rightBarButtonItems = [done, add, delete]
     }
 }
@@ -133,6 +107,7 @@ extension DetailsScreenViewController {
         presenter.deleteNote(noteIndex: noteIndex!)
     }
     
+    //Scrolls textView up when keyboard appears
     @objc func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         
@@ -158,7 +133,7 @@ extension DetailsScreenViewController {
     
     @objc func showStyleKeyboard() {
         let bottomSafeAreaInset = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0.0
-        let keyboardView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: textView.frame.width, height: ViewSize.keyboardSizeHeight + bottomSafeAreaInset)))
+        let keyboardView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: textView.frame.width, height: Constants.keyboardSizeHeight + bottomSafeAreaInset)))
         keyboardView.backgroundColor = .tertiarySystemBackground
         
         keyboardView.addSubview(styleKeyboardService)

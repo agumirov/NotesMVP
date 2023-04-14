@@ -37,7 +37,7 @@ class StyleKeyboardService: UIView{
         row.axis = .horizontal
         row.spacing = 5
         row.backgroundColor = .clear
-        row.layer.cornerRadius = CGFloat(ViewSize.buttonCornerRadius)
+        row.layer.cornerRadius = CGFloat(Constants.buttonCornerRadius)
         row.alignment = .fill
         row.distribution = .fillEqually
         return row
@@ -45,10 +45,10 @@ class StyleKeyboardService: UIView{
     
     let increaseSizeButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "plus", withConfiguration: ViewSize.imageConfig)
+        let image = UIImage(systemName: "plus", withConfiguration: Constants.imageConfig)
         button.setImage(image, for: .normal)
         button.backgroundColor = .systemGray5
-        button.layer.cornerRadius = CGFloat(ViewSize.buttonCornerRadius)
+        button.layer.cornerRadius = CGFloat(Constants.buttonCornerRadius)
         button.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         button.addTarget(nil, action: #selector(changeSize), for: .touchUpInside)
         button.tag = FontSize.increase.rawValue
@@ -57,10 +57,10 @@ class StyleKeyboardService: UIView{
     
     let decreaseSizeButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "minus", withConfiguration: ViewSize.imageConfig)
+        let image = UIImage(systemName: "minus", withConfiguration: Constants.imageConfig)
         button.setImage(image, for: .normal)
         button.backgroundColor = .systemGray5
-        button.layer.cornerRadius = CGFloat(ViewSize.buttonCornerRadius)
+        button.layer.cornerRadius = CGFloat(Constants.buttonCornerRadius)
         button.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
                 button.addTarget(nil, action: #selector(changeSize), for: .touchUpInside)
         button.tag = FontSize.decrease.rawValue
@@ -72,7 +72,7 @@ class StyleKeyboardService: UIView{
         row.axis = .horizontal
         row.spacing = 5
         row.backgroundColor = .clear
-        row.layer.cornerRadius = CGFloat(ViewSize.buttonCornerRadius)
+        row.layer.cornerRadius = CGFloat(Constants.buttonCornerRadius)
         row.alignment = .fill
         row.distribution = .fillEqually
         return row
@@ -80,10 +80,10 @@ class StyleKeyboardService: UIView{
     
     let boldButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "bold", withConfiguration: ViewSize.imageConfig)
+        let image = UIImage(systemName: "bold", withConfiguration: Constants.imageConfig)
         button.setImage(image, for: .normal)
         button.backgroundColor = .systemGray5
-        button.layer.cornerRadius = CGFloat(ViewSize.buttonCornerRadius)
+        button.layer.cornerRadius = CGFloat(Constants.buttonCornerRadius)
         button.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
                 button.addTarget(nil, action: #selector(changeFont), for: .touchUpInside)
         button.tag = Fonts.bold.rawValue
@@ -93,7 +93,7 @@ class StyleKeyboardService: UIView{
     
     let italicButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "italic", withConfiguration: ViewSize.imageConfig)
+        let image = UIImage(systemName: "italic", withConfiguration: Constants.imageConfig)
         button.setImage(image, for: .normal)
         button.backgroundColor = .systemGray5
         button.target(forAction: #selector(changeFont),
@@ -105,7 +105,7 @@ class StyleKeyboardService: UIView{
     
     let underlinedButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "underline", withConfiguration: ViewSize.imageConfig)
+        let image = UIImage(systemName: "underline", withConfiguration: Constants.imageConfig)
         button.setImage(image, for: .normal)
         button.backgroundColor = .systemGray5
         button.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
@@ -116,10 +116,10 @@ class StyleKeyboardService: UIView{
     
     let strikethroughButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(systemName: "strikethrough", withConfiguration: ViewSize.imageConfig)
+        let image = UIImage(systemName: "strikethrough", withConfiguration: Constants.imageConfig)
         button.setImage(image, for: .normal)
         button.backgroundColor = .systemGray5
-        button.layer.cornerRadius = CGFloat(ViewSize.buttonCornerRadius)
+        button.layer.cornerRadius = CGFloat(Constants.buttonCornerRadius)
         button.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         button.addTarget(nil, action: #selector(changeFont), for: .touchUpInside)
         button.tag = Fonts.strikethrough.rawValue
@@ -152,7 +152,7 @@ class StyleKeyboardService: UIView{
         
         buttonColumn.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(20)
-            make.height.equalTo(ViewSize.columnHeigh)
+            make.height.equalTo(Constants.columnHeigh)
             make.top.equalToSuperview().inset(40)
         }
     }
