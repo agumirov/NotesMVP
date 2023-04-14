@@ -20,5 +20,5 @@ e-mail: agumirov.dev@gmail.com
 <div>
 <img src="https://user-images.githubusercontent.com/130672296/231914188-e68c2c06-f5be-413e-b7bb-ba56a949b07a.png" width="200" />
 <img src="https://user-images.githubusercontent.com/130672296/231914404-b763edb1-393c-4bee-9583-363f71d8c7a7.png" width="200" />
-<img src="https://user-images.githubusercontent.com/130672296/231914411-389a3959-1343-4226-96a5-10ecc66d14a5.png" width="200" />
+<img src="https://user-images.githubusercontent.com/130672296/231914747-a3989b91-99a5-4e3f-8b9d-7f79d9c123ae.png" width="200" />
 </div>
