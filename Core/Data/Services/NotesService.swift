@@ -17,8 +17,6 @@ protocol NotesServiceProtocol: AnyObject {
 
 class NotesService: NotesServiceProtocol {
     
-    
-     
     let defaults = UserDefaults.standard
     
     var notes: [NoteModel] {
